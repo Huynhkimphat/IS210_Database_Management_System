@@ -78,23 +78,43 @@ INSERT INTO Cau1 VALUE (Cau1Seq.NEXTVAL,SELECT INSTRUCTOR.LASTNAME
                                                         GROUP BY FROM CLASS.InstructorID
                                                         )
                         )
--- 2) Viết một đoạn chương trình: người dùng nhập vào mã sinh viên. Nếu sinh viên đó tồn tại thì hiển thị ra họ tên sinh viên và số lớp sinh viên đó đang học. Ngươc lại, yêu cầu người dùng thêm vào sinh viên mới với mã số vừa nhập, các thông tin khác (họ, tên sinh viên, địa chỉ nguời dùng sẽ nhập vào).
+-- 2) Viết một đoạn chương trình: người dùng nhập vào mã sinh viên.
+--      Nếu sinh viên đó tồn tại thì hiển thị ra họ tên sinh viên và số lớp sinh viên đó đang học.
+--      Ngươc lại, yêu cầu người dùng thêm vào sinh viên mới với mã số vừa nhập,
+--      các thông tin khác (họ, tên sinh viên, địa chỉ nguời dùng sẽ nhập vào).
 
 
--- 1) Viết một đoạn mã lệnh: Người dùng nhập vào mã của một giáo viên, xác định số lượng lớp mà giáo viên này đang dạy. Nếu số lớp lớn hơn hoặc bằng 5 thì đưa ra một thông báo: “Giáo viên này nên nghỉ ngơi!”, ngược lại in ra số lớp giáo viên này đang dạy.
--- 2) Viết một đoạn mã lệnh (dùng cấu trúc case): Người dùng nhập vào mã của một sinh viên, mã lớp mà sinh viên này đang học. In ra điểm chữ của sinh viên này: A(90-100), B(80-90), C(70-80), D(50-70) F(0-50). Đồng thời in thông báo lỗi tương ứng khi người dùng nhập mã sinh viên hay mã lớp không tồn tại.
+-- 3) Viết một đoạn mã lệnh: Người dùng nhập vào mã của một giáo viên, xác định số lượng lớp mà giáo viên này đang dạy.
+--      Nếu số lớp lớn hơn hoặc bằng 5 thì đưa ra một thông báo: “Giáo viên này nên nghỉ ngơi!”,
+--      ngược lại in ra số lớp giáo viên này đang dạy.
+
+-- 4) Viết một đoạn mã lệnh (dùng cấu trúc case): Người dùng nhập vào mã của một sinh viên, mã lớp mà sinh viên này đang học.
+--      In ra điểm chữ của sinh viên này: A(90-100), B(80-90), C(70-80), D(50-70) F(0-50).
+--      Đồng thời in thông báo lỗi tương ứng khi người dùng nhập mã sinh viên hay mã lớp không tồn tại.
 
 
--- Viết một đoạn chương trình in ra thông tin các môn học và các lớp học thuộc môn học, số lượng sinh viên đăng kí lớp học như sau:
--- Trong đó: “20 Intro to Computers” : 20 là mã môn học (courseno), Intro to Computers: là tên môn học (description); “Lop: 2 co so luong sinh vien dang ki: 3”: 2 là mã lớp học của môn tương ứng (classid), 3 là số lương sinh viên đăng kí lớp học này (count(*)).
+-- 5) Viết một đoạn chương trình in ra thông tin các môn học và các lớp học thuộc môn học, số lượng sinh viên đăng kí lớp học như sau:
+--      Trong đó: “20 Intro to Computers” : 20 là mã môn học (courseno),
+--      Intro to Computers: là tên môn học (description);
+--      “Lop: 2 co so luong sinh vien dang ki: 3”
+--           2 là mã lớp học của môn tương ứng (classid), 3 là số lương sinh viên đăng kí lớp học này (count(*)).
 -- Gợi ý: Tạo hai con trỏ (con trỏ sau có đối số là mã môn học), duyệt lần lượt 2 con trỏ này lồng nhau.
 
--- 1) Viết 2 thủ tục
---     a. Thủ tục find_sname có 1 thông số truyền vào (i_student_id), và 2 thông số trả về (o_first_name ,o_last_name) là họ và tên tương ứng của sinh viên với mã số truyền vào.
---     b. Thủ tục print_student_name in ra tên của sinh viên với mã số là đối số truyền vào của thủ tục.
--- 2) Viết thủ tục Discount giảm giá 5% cho tất cả các môn học có số sinh viên đăng kí nhiều hơn 15 sinh viên. Ứng với mỗi môn học được giảm giá in ra tên môn học đó.
--- 3) Viết hàm Total_cost_for_student nhận vào mã số của sinh viên tra về tổng chi phí mà sinh viên đó phải trả. Trả về NULL nếu không tồn tại sinh viên tương ứng.
+-- 6) Viết 2 thủ tục
+--     a. Thủ tục find_sname có 1 thông số truyền vào (i_student_id),
+--      và 2 thông số trả về (o_first_name ,o_last_name) là họ và tên tương ứng của sinh viên với mã số truyền vào.
 
--- 1) Viết trigger cho các tác vụ thêm vào (insert), hay cập nhật (update) cho tất cả các bảng trong lược đồ quan hệ với các trường created_by, created_date, modified_by, modified_date, sẽ do trigger này thêm vào tương ứng với user hiện tại, ngày hệ thống hiện tại.
+--     b. Thủ tục print_student_name in ra tên của sinh viên với mã số là đối số truyền vào của thủ tục.
+
+-- 7) Viết thủ tục Discount giảm giá 5% cho tất cả các môn học có số sinh viên đăng kí nhiều hơn 15 sinh viên.
+--      Ứng với mỗi môn học được giảm giá in ra tên môn học đó.
+
+-- 8) Viết hàm Total_cost_for_student nhận vào mã số của sinh viên tra về tổng chi phí mà sinh viên đó phải trả.
+--      Trả về NULL nếu không tồn tại sinh viên tương ứng.
+
+-- 9) Viết trigger cho các tác vụ thêm vào (insert), hay cập nhật (update) cho tất cả các bảng trong
+--      lược đồ quan hệ với các trường created_by, created_date, modified_by, modified_date,
+--      sẽ do trigger này thêm vào tương ứng với user hiện tại, ngày hệ thống hiện tại.
 -- Gợi ý: Dùng các hàm USER, SYSDATE để lấy được người dùng hiện tại, và ngày giờ của hệ thống.
--- 2) Viết trigger hiện thực yêu cầu sau: mỗi sinh viên không được đăng kí quá 4 môn họ
+
+-- 10) Viết trigger hiện thực yêu cầu sau: mỗi sinh viên không được đăng kí quá 4 môn họ
