@@ -94,7 +94,7 @@ WHERE S_EMP.ID in (
 SELECT MAX(S_ORD.TOTAL) "Highest" , MIN(S_ORD.TOTAL) "Lowest"
 FROM S_ORD
     -- • Phép kết
--- ! 17) Hiển thị tên sản phẩm, mã sản phẩm và số lượng từng sản phẩm trong  đơn đặt hàng có mã số 101. Cột số lượng được đặt tên là ORDERED.
+-- ! 17) Hiển thị tên sản phẩm, mã sản phẩm và số lượng từng sản phẩm trong đơn đặt hàng có mã số 101. Cột số lượng được đặt tên là ORDERED.
 SELECT S_PRODUCT."NAME" ,S_PRODUCT.ID, S_ITEM.QUANTITY "ORDERED"
 FROM S_PRODUCT, S_ITEM
 WHERE S_PRODUCT.id=S_ITEM.PRODUCT_ID
