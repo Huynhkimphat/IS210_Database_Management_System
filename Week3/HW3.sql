@@ -1,14 +1,83 @@
+-- ***** DATABASE
+-- COURSE(CourseNo,Description,Cost,Prerequisite,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+-- STUDENT(StudentID,Salutation,FirstName,LastName,Address,Phone,Employer,RegistrationDate,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+-- CLASS(ClassID,CourseNo,ClassNo,StartDateTime,Location,InstructorID,Capacity,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate )
+-- ENROLLMENT(StudentID,ClassID,EnrollDate,FinalGrade,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+-- INSTRUCTOR(InstructorID,Salutation, FirstName,LastName,Address,Phone,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate )
+-- GRADE(StudentID,ClassID,Grade,Comments,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate)
+
+-- ***** HOMEWORK
 -- 1) Viết các lệnh thực hiện những công việc sau:
 --     a. Tạo một bảng Cau1 với 2 cột ID (number) và NAME (varchar2(20)).
+CREATE TABLE Cau1(
+    ID NUMBER,
+    NAME VARCHAR2(20),
+)
 --     b. Tạo một sequence Cau1Seq với bước tăng là 5.
+CREATE SEQUENCE Cau1Seq INCREMENT BY 5
 --     c. Khai báo 2 biến v_name và v_id. Biến v_name, v_id. dùng để chứa giá trị họ, mã của sinh viên được thêm vào.
---     d. Thêm vào bảng Cau1 tên của sinh viên đã đăng kí trong các môn học (bảng enrollment) nhiều nhất. Mã sinh viên sẽ được lấy từ sequence Cau1Seq. Sau thao tác này tạo Savepoint A.
---     e. Thêm vào bảng Cau1 tên của sinh viên đã đăng kí trong các môn học (bảng enrollment) ít nhất. Mã sinh viên sẽ được lấy từ sequence Cau1Seq. Sau thao tác này tạo Savepoint B.
+DECLARE v_id Cau1.ID%TYPE;
+DECLARE v_name Cau1."Name"%TYPE;
+--     d. Thêm vào bảng Cau1 tên của sinh viên đã đăng kí trong các môn học (bảng enrollment) nhiều nhất. 
+--          Mã sinh viên sẽ được lấy từ sequence Cau1Seq. Sau thao tác này tạo Savepoint A.
+INSERT INTO Cau1 VALUE (Cau1Seq.NEXTVAL,SELECT STUDENT.LASTNAME 
+                                        FROM STUDENT,ENROLLMENT 
+                                        WHERE STUDENT.StudentID=ENROLLMENT.StudentID
+                                        GROUP BY STUDENT.STUDENTID
+                                        HAVING COUNT(*)>=(SELECT COUNT(*)
+                                                        FROM ENROLLMENT
+                                                        GROUP BY FROM ENROLLMENT.STUDENTID
+                                                        )
+                        )
+SAVEPOINT A;
+--     e. Thêm vào bảng Cau1 tên của sinh viên đã đăng kí trong các môn học (bảng enrollment) ít nhất.
+--          Mã sinh viên sẽ được lấy từ sequence Cau1Seq. Sau thao tác này tạo Savepoint B.
+INSERT INTO Cau1 VALUE (Cau1Seq.NEXTVAL,SELECT STUDENT.LASTNAME 
+                                        FROM STUDENT,ENROLLMENT 
+                                        WHERE STUDENT.StudentID=ENROLLMENT.StudentID
+                                        GROUP BY STUDENT.STUDENTID
+                                        HAVING COUNT(*)<=(SELECT COUNT(*)
+                                                        FROM ENROLLMENT
+                                                        GROUP BY FROM ENROLLMENT.STUDENTID
+                                                        )
+                        )
+SAVEPOINT B;
 --     f. Làm tương tự đối với các giáo viên có số lượng môn học dạy nhiều nhất. Sau thao tác này tạo Savepoint C.
+INSERT INTO Cau1 VALUE (Cau1Seq.NEXTVAL,SELECT INSTRUCTOR.LASTNAME 
+                                        FROM INSTRUCTOR,CLASS 
+                                        WHERE INSTRUCTOR.InstructorID=CLASS.InstructorID
+                                        GROUP BY INSTRUCTOR.InstructorID
+                                        HAVING COUNT(*)>=(SELECT COUNT(*)
+                                                        FROM CLASS
+                                                        GROUP BY FROM CLASS.InstructorID
+                                                        )
+                        )
+SAVEPOINT C;
 --     g. Sử dụng câu lệnh SELECT INTO, chứa giá trị của giáo viên có tên tương ứng v_name vào biến v_id.
+SELECT "name" into v_name from Cau1 Where Cau1.id=15
+SELECT id INTO v_id from Cau1 where Cau1."name"=v_name
 --     h. Undo giáo viên được thêm vào sử dụng rollback.
+ROLLBACK TO SAVEPOINT B;
 --     i. Thêm vào bảng Cau1 giáo viên dạy ít môn học nhất nhưng mã thêm vào không lấy từ sequence mà lấy mã của giáo viên bị rollback truớc đó.
+INSERT INTO Cau1 VALUE (v_id,SELECT INSTRUCTOR.LASTNAME 
+                                        FROM INSTRUCTOR,CLASS 
+                                        WHERE INSTRUCTOR.InstructorID=CLASS.InstructorID
+                                        GROUP BY INSTRUCTOR.InstructorID
+                                        HAVING COUNT(*)>=(SELECT COUNT(*)
+                                                        FROM CLASS
+                                                        GROUP BY FROM CLASS.InstructorID
+                                                        )
+                        )
 --     j. Làm lại câu f với ID là lấy từ sequence.
+INSERT INTO Cau1 VALUE (Cau1Seq.NEXTVAL,SELECT INSTRUCTOR.LASTNAME 
+                                        FROM INSTRUCTOR,CLASS 
+                                        WHERE INSTRUCTOR.InstructorID=CLASS.InstructorID
+                                        GROUP BY INSTRUCTOR.InstructorID
+                                        HAVING COUNT(*)>=(SELECT COUNT(*)
+                                                        FROM CLASS
+                                                        GROUP BY FROM CLASS.InstructorID
+                                                        )
+                        )
 -- 2) Viết một đoạn chương trình: người dùng nhập vào mã sinh viên. Nếu sinh viên đó tồn tại thì hiển thị ra họ tên sinh viên và số lớp sinh viên đó đang học. Ngươc lại, yêu cầu người dùng thêm vào sinh viên mới với mã số vừa nhập, các thông tin khác (họ, tên sinh viên, địa chỉ nguời dùng sẽ nhập vào).
 
 
