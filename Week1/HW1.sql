@@ -33,8 +33,8 @@ EDIT KH.sql
 ...
 -- ! 4) Hiển thị tên truy cập của nhân viên 23.
 SELECT USERID 
-FROM S_CUSTOMER 
-WHERE S_CUSTOMER.ID=23
+FROM S_EMP 
+WHERE S_EMP.ID=23
 -- ! 5) Hiển thị họ, tên và mã phòng của nhân viên trong phòng 10, 50 và sắp theo thứ tự của tên.
 --      Nối 2 cột họ  tên và đặt tên cột mới là Employees.
 SELECT S_EMP.last_name || ' ' || S_EMP.first_name EMPLOYEE ,S_EMP.DEPT_ID  
@@ -71,7 +71,7 @@ WHERE EXTRACT(YEAR FROM S_EMP.START_DATE)=1991
 -- ! 11) Hiển thị mã nhân viên, tên và mức lương được tăng thêm 15%.
 SELECT ID,S_EMP.last_name || ' ' || S_EMP.first_name EMPLOYEE,SALARY
 FROM S_EMP 
-WHERE S_EMP.COMMISSION_PCT =0.15
+WHERE S_EMP.COMMISSION_PCT =15
 -- ! 12) Hiển thị tên của mỗi nhân viên, ngày tuyển dụng và ngày xem xét tăng lương.
 -- Ngày xét tăng lương theo qui định là vào ngày thứ hai sau 6 tháng làm việc. Định dạng ngày xem xét theo kiểu “Eighth of May 1992”.
 
@@ -80,7 +80,7 @@ SELECT S_PRODUCT."NAME"
 FROM S_PRODUCT
 WHERE S_PRODUCT."NAME" LIKE '%Ski%'
 -- ! 14) Với mỗi nhân viên, hãy tính số tháng thâm niên của nhân viên.  Sắp xếp kết quả tăng dần theo tháng thâm niên và số tháng được làm tròn.
-SELECT ID, MONTHS_BETWEEN(CURRENT_DATE,S_EMP.START_DATE)
+SELECT ID, ROUND(MONTHS_BETWEEN(CURRENT_DATE,S_EMP.START_DATE))
 FROM S_EMP
 -- ! 15) Cho biết có bao nhiêu người quản lý.
 SELECT COUNT(S_EMP.ID) 
@@ -104,11 +104,11 @@ SELECT S_CUSTOMER.ID,S_ORD.ID
 FROM S_CUSTOMER LEFT JOIN S_ORD ON S_CUSTOMER.ID = S_ORD.CUSTOMER_ID
 ORDER BY S_CUSTOMER.ID
 -- ! 19) Hiển thị mã khách hàng, mã sản phẩm và số lượng đặt hàng của các đơn đặt hàng có trị giá trên 100.000.
-SELECT S_CUSTOMER.ID,S_ITEM.ID,S_ITEM.QUANTITY
+SELECT S_CUSTOMER.ID,S_ITEM.ITEM_ID,S_ITEM.QUANTITY
 FROM S_CUSTOMER,S_ITEM,S_ORD
 WHERE S_CUSTOMER.ID=S_ORD.CUSTOMER_ID
 AND S_ORD.ID=S_ITEM.ORD_ID
-WHERE S_ORD.TOTAL>100.000
+AND S_ORD.TOTAL>100.000
 -- ! 20) Hiển thị họ tên của tất cả các nhân viên không phải là người quản lý.
 SELECT S_EMP.last_name || ' ' || S_EMP.first_name EMPLOYEE
 FROM S_EMP 
@@ -130,7 +130,7 @@ WHERE S_PRODUCT.short_desc LIKE '%bicycle%'
 SELECT S_PRODUCT.short_desc
 FROM S_PRODUCT
 -- ! 24) Hiển thị tên nhân viên và chức vụ trong ngoặc đơn “( )” của tất cả các nhân viên. Ví dụ: Nguyễn Văn Tâm (Giám đốc).
-SELECT S_EMP.last_name || ' ' || S_EMP.first_name EMPLOYEE || '(' || S_EMP.title || ')'
+SELECT S_EMP.last_name || ' ' || S_EMP.first_name || '(' || S_EMP.title || ')'  "Name(Role)"
 FROM S_EMP
     -- • Các hàm gom nhóm
 -- ! 25) Với từng người quản lý, cho biết mã người quản lý và số nhân  viên  mà họ quản lý.
@@ -142,14 +142,14 @@ ORDER BY S_EMP.MANAGER_ID
 SELECT S_EMP.MANAGER_ID,COUNT(*) EMPLOYEE
 FROM S_EMP
 GROUP BY S_EMP.MANAGER_ID
-ORDER BY S_EMP.MANAGER_ID
 HAVING COUNT(*) >= 20
+ORDER BY S_EMP.MANAGER_ID
 -- ! 27) Cho biết mã vùng, tên vùng và số phòng ban trực thuộc trong mỗi vùng.
 SELECT S_REGION.ID, S_REGION."NAME", COUNT(*) "WAREHOUSE"
 FROM S_REGION, S_WAREHOUSE
 WHERE S_WAREHOUSE.REGION_ID=S_REGION.ID
-GROUP BY S_REGION.ID
-ORDER BY S_REGION.ID
+GROUP BY S_REGION."NAME"
+ORDER BY S_REGION."NAME"
 -- ! 28) Hiển thị tên khách hàng và số lượng đơn đặt hàng của mỗi khách hàng.
 SELECT S_CUSTOMER."NAME",COUNT(*) "ORDER"
 FROM S_CUSTOMER, S_ORD
