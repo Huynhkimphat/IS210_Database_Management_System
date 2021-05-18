@@ -117,4 +117,20 @@ INSERT INTO Cau1 VALUE (Cau1Seq.NEXTVAL,SELECT INSTRUCTOR.LASTNAME
 --      sẽ do trigger này thêm vào tương ứng với user hiện tại, ngày hệ thống hiện tại.
 -- Gợi ý: Dùng các hàm USER, SYSDATE để lấy được người dùng hiện tại, và ngày giờ của hệ thống.
 
--- 10) Viết trigger hiện thực yêu cầu sau: mỗi sinh viên không được đăng kí quá 4 môn họ
+-- 10) Viết trigger hiện thực yêu cầu sau: mỗi sinh viên không được đăng kí quá 4 môn học
+CREATE OR REPLACE TRIGGER TRG_10
+BEFORE INSERT ON ENROLLMENT
+FOR EACH ROW
+DECLARE
+    class int;
+BEGIN  
+    SELECT count(id) INTO class
+    FROM ENROLLMENT
+    WHERE StudentID=:new.StudentID;
+    IF (warehouse>4)
+    THEN
+        RAISE_APPLICATION_ERROR(-2000,'Tong so mon hoc cua sinh vien da qua 4');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Da them thanh cong');
+    END IF;
+END;
